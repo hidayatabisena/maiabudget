@@ -50,7 +50,7 @@ const BudgetingApp: React.FC = () => {
             <Input label="OpenAI Subscription (USD per day)" value={openAISubscription} onChange={setOpenAISubscription} />
             <Input label="Antropic Subscription (USD per day)" value={antropicSubscription} onChange={setAntropicSubscription} />
             <Input label="Google Gemini Subscription (IDR per day)" value={geminiSubscription} onChange={setGeminiSubscription} />
-            <Input label="Sales Target per Member" value={salesTarget} onChange={setSalesTarget} />
+            <Input label="Sales Target" value={salesTarget} onChange={setSalesTarget} />
             <Input label="Sales Price (IDR)" value={salesPrice} onChange={setSalesPrice} />
             
             <button 
