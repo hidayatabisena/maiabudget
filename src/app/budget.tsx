@@ -43,7 +43,7 @@ const BudgetingApp: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12">
       <div className="w-full max-w-md">
         <div className="bg-white p-8 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold mb-6 text-center">MAIA Budgeting</h1>
+          <h1 className="text-2xl font-bold mb-6 text-center">MAIA Cost Estimation</h1>
           <div className="space-y-4">
             <Input label="Member Amount" value={memberAmount} onChange={setMemberAmount} />
             <Input label="MAIA Subscription (IDR)" value={maiaSubscription} onChange={setMaiaSubscription} />
