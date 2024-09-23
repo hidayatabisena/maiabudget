@@ -40,10 +40,10 @@ const BudgetingApp: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12">
       <div className="w-full max-w-md">
-        <div className="bg-white p-8 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold mb-6 text-center">MAIA Cost Estimation</h1>
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">MAIA Cost Estimation</h1>
           <div className="space-y-4">
             <Input label="Member Amount" value={memberAmount} onChange={setMemberAmount} />
             <Input label="MAIA Subscription (IDR)" value={maiaSubscription} onChange={setMaiaSubscription} />
@@ -60,7 +60,7 @@ const BudgetingApp: React.FC = () => {
               Calculate
             </button>
 
-            <div className="mt-6 space-y-2 text-sm">
+            <div className="mt-6 space-y-2 text-sm text-gray-800 dark:text-gray-200">
               <p><strong>Total Price:</strong> {formatCurrency(totalPrice)}</p>
               <p><strong>Total Sales:</strong> {formatCurrency(totalSales)}</p>
               <p><strong>Profit:</strong> <span className="font-mono">{formatCurrency(profit)}</span></p>
@@ -98,12 +98,12 @@ interface InputProps {
   
     return (
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
         <input
           type="text"
           value={value === 0 ? '' : formatNumber(value)}
           onChange={handleChange}
-          className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
         />
       </div>
     );
