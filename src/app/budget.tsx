@@ -46,7 +46,7 @@ const BudgetingApp: React.FC = () => {
       <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">MAIA Cost Estimation</h1>
           <div className="space-y-4">
             <Input label="Member Amount" value={memberAmount} onChange={setMemberAmount} />
-            <Input label="MAIA Subscription (IDR)" value={maiaSubscription} onChange={setMaiaSubscription} />
+            <Input label="MAIA Subscription (IDR per month)" value={maiaSubscription} onChange={setMaiaSubscription} />
             <Input label="OpenAI Subscription (USD per day)" value={openAISubscription} onChange={setOpenAISubscription} />
             <Input label="Antropic Subscription (USD per day)" value={antropicSubscription} onChange={setAntropicSubscription} />
             <Input label="Google Gemini Subscription (IDR per day)" value={geminiSubscription} onChange={setGeminiSubscription} />
@@ -63,7 +63,7 @@ const BudgetingApp: React.FC = () => {
             <div className="mt-6 space-y-2 text-sm text-gray-800 dark:text-gray-200">
               <p><strong>Total Price:</strong> {formatCurrency(totalPrice)}</p>
               <p><strong>Total Sales:</strong> {formatCurrency(totalSales)}</p>
-              <p><strong>Profit:</strong> <span className="font-mono">{formatCurrency(profit)}</span></p>
+              <p><strong>Profit per month:</strong> <span className="font-mono">{formatCurrency(profit)}</span></p>
             </div>
           </div>
         </div>
