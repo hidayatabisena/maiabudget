@@ -14,25 +14,40 @@ const BudgetingApp: React.FC = () => {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [totalSales, setTotalSales] = useState<number>(0);
   const [profit, setProfit] = useState<number>(0);
+  const [isCalculated, setIsCalculated] = useState<boolean>(false);
 
   const exchangeRate = 15000;
   const daysInMonth = 30;
 
-  const calculateResults = () => {
-    // Calculate Total Price
-    const openAIInRupiah = openAISubscription * exchangeRate * daysInMonth;
-    const antropicInRupiah = antropicSubscription * exchangeRate * daysInMonth;
-    const geminiInRupiah = geminiSubscription * daysInMonth;
-    const calculatedTotalPrice = (memberAmount * maiaSubscription) + openAIInRupiah + antropicInRupiah + geminiInRupiah;
-    setTotalPrice(calculatedTotalPrice);
+  const handleButtonClick = () => {
+    if (isCalculated) {
+      // Reset all input fields and results
+      setMemberAmount(0);
+      setMaiaSubscription(0);
+      setOpenAISubscription(0);
+      setAntropicSubscription(0);
+      setGeminiSubscription(0);
+      setSalesTarget(0);
+      setSalesPrice(0);
+      setTotalPrice(0);
+      setTotalSales(0);
+      setProfit(0);
+      setIsCalculated(false);
+    } else {
+      // Perform calculations
+      const openAIInRupiah = openAISubscription * exchangeRate * daysInMonth;
+      const antropicInRupiah = antropicSubscription * exchangeRate * daysInMonth;
+      const geminiInRupiah = geminiSubscription * daysInMonth;
+      const calculatedTotalPrice = (memberAmount * maiaSubscription) + openAIInRupiah + antropicInRupiah + geminiInRupiah;
+      setTotalPrice(calculatedTotalPrice);
 
-    // Calculate Total Sales
-    const calculatedTotalSales = salesTarget * salesPrice;
-    setTotalSales(calculatedTotalSales);
+      const calculatedTotalSales = salesTarget * salesPrice;
+      setTotalSales(calculatedTotalSales);
 
-    // Calculate Profit
-    const calculatedProfit = calculatedTotalSales - calculatedTotalPrice;
-    setProfit(calculatedProfit);
+      const calculatedProfit = calculatedTotalSales - calculatedTotalPrice;
+      setProfit(calculatedProfit);
+      setIsCalculated(true);
+    }
   };
 
   const formatCurrency = (amount: number) => {
@@ -42,8 +57,8 @@ const BudgetingApp: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12">
       <div className="w-full max-w-md">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">MAIA Cost Estimation</h1>
+        <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">MAIA Cost Estimation</h1>
           <div className="space-y-4">
             <Input label="Member Amount" value={memberAmount} onChange={setMemberAmount} />
             <Input label="MAIA Subscription (IDR per month)" value={maiaSubscription} onChange={setMaiaSubscription} />
@@ -54,17 +69,19 @@ const BudgetingApp: React.FC = () => {
             <Input label="Sales Price (IDR)" value={salesPrice} onChange={setSalesPrice} />
             
             <button 
-              onClick={calculateResults}
-              className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+              onClick={handleButtonClick}
+              className={`w-full ${isCalculated ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded transition-colors`}
             >
-              Calculate
+              {isCalculated ? 'Reset' : 'Calculate'}
             </button>
 
-            <div className="mt-6 space-y-2 text-sm text-gray-800 dark:text-gray-200">
-              <p><strong>Total Price:</strong> {formatCurrency(totalPrice)}</p>
-              <p><strong>Total Sales:</strong> {formatCurrency(totalSales)}</p>
-              <p><strong>Profit per month:</strong> <span className="font-mono">{formatCurrency(profit)}</span></p>
-            </div>
+            {isCalculated && (
+              <div className="mt-6 space-y-2 text-sm text-gray-800 dark:text-gray-200">
+                <p><strong>Total Price:</strong> {formatCurrency(totalPrice)}</p>
+                <p><strong>Total Sales:</strong> {formatCurrency(totalSales)}</p>
+                <p><strong>Profit per month:</strong> <span className="font-mono">{formatCurrency(profit)}</span></p>
+              </div>
+            )}
           </div>
         </div>
       </div>
