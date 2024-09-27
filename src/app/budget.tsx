@@ -56,26 +56,25 @@ const BudgetingApp: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-4">
-      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-8">
-        <div className="flex-1 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+      <div className="w-full max-w-4xl flex flex-col md:flex-row gap-8 items-start justify-center">
+        <div className="w-full max-w-xl mx-auto md:mx-0 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
           <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">MAIA Cost Estimation</h1>
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input label="Member Amount" value={memberAmount} onChange={setMemberAmount} />
-            <Input label="MAIA Subscription (IDR per month)" value={maiaSubscription} onChange={setMaiaSubscription} />
-            <Input label="OpenAI Subscription (USD per day)" value={openAISubscription} onChange={setOpenAISubscription} />
-            <Input label="Antropic Subscription (USD per day)" value={antropicSubscription} onChange={setAntropicSubscription} />
-            <Input label="Google Gemini Subscription (IDR per day)" value={geminiSubscription} onChange={setGeminiSubscription} />
+            <Input label="MAIA Sub (IDR/month)" value={maiaSubscription} onChange={setMaiaSubscription} />
+            <Input label="OpenAI Sub (USD/day)" value={openAISubscription} onChange={setOpenAISubscription} />
+            <Input label="Antropic Sub (USD/day)" value={antropicSubscription} onChange={setAntropicSubscription} />
+            <Input label="Gemini Sub (USD/day)" value={geminiSubscription} onChange={setGeminiSubscription} />
             <Input label="Sales Target" value={salesTarget} onChange={setSalesTarget} />
             <Input label="Sales Price (IDR)" value={salesPrice} onChange={setSalesPrice} />
-            <Input label="Exchange Rate (IDR to USD)" value={exchangeRate} onChange={setExchangeRate} />
-            
-            <button 
-              onClick={handleButtonClick}
-              className={`w-full ${isCalculated ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded transition-colors`}
-            >
-              {isCalculated ? 'Reset' : 'Calculate'}
-            </button>
+            <Input label="Exchange Rate (IDR/USD)" value={exchangeRate} onChange={setExchangeRate} />
           </div>
+          <button 
+            onClick={handleButtonClick}
+            className={`w-full mt-4 ${isCalculated ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white px-4 py-2 rounded transition-colors`}
+          >
+            {isCalculated ? 'Reset' : 'Calculate'}
+          </button>
         </div>
 
         <div className="md:self-start bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
