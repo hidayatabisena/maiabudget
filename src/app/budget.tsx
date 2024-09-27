@@ -15,8 +15,8 @@ const BudgetingApp: React.FC = () => {
   const [totalSales, setTotalSales] = useState<number>(0);
   const [profit, setProfit] = useState<number>(0);
   const [isCalculated, setIsCalculated] = useState<boolean>(false);
+  const [exchangeRate, setExchangeRate] = useState<number>(15000);
 
-  const exchangeRate = 15000;
   const daysInMonth = 30;
 
   const handleButtonClick = () => {
@@ -55,9 +55,9 @@ const BudgetingApp: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12">
-      <div className="w-full max-w-md">
-        <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 py-12 px-4">
+      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-8">
+        <div className="flex-1 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
           <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">MAIA Cost Estimation</h1>
           <div className="space-y-4">
             <Input label="Member Amount" value={memberAmount} onChange={setMemberAmount} />
@@ -67,6 +67,7 @@ const BudgetingApp: React.FC = () => {
             <Input label="Google Gemini Subscription (IDR per day)" value={geminiSubscription} onChange={setGeminiSubscription} />
             <Input label="Sales Target" value={salesTarget} onChange={setSalesTarget} />
             <Input label="Sales Price (IDR)" value={salesPrice} onChange={setSalesPrice} />
+            <Input label="Exchange Rate (IDR to USD)" value={exchangeRate} onChange={setExchangeRate} />
             
             <button 
               onClick={handleButtonClick}
@@ -74,15 +75,22 @@ const BudgetingApp: React.FC = () => {
             >
               {isCalculated ? 'Reset' : 'Calculate'}
             </button>
-
-            {isCalculated && (
-              <div className="mt-6 space-y-2 text-sm text-gray-800 dark:text-gray-200">
-                <p><strong>Total Price:</strong> {formatCurrency(totalPrice)}</p>
-                <p><strong>Total Sales:</strong> {formatCurrency(totalSales)}</p>
-                <p><strong>Profit per month:</strong> <span className="font-mono">{formatCurrency(profit)}</span></p>
-              </div>
-            )}
           </div>
+        </div>
+
+        <div className="md:self-start bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+          {isCalculated ? (
+            <div className="space-y-4 text-gray-800 dark:text-gray-200">
+              <h2 className="text-xl font-bold mb-4">Results</h2>
+              <p><strong>Total Price:</strong> {formatCurrency(totalPrice)}</p>
+              <p><strong>Total Sales:</strong> {formatCurrency(totalSales)}</p>
+              <p><strong>Profit per month:</strong> <span className="font-mono">{formatCurrency(profit)}</span></p>
+            </div>
+          ) : (
+            <div className="text-gray-500 dark:text-gray-400 text-center">
+              <p>Enter values and click Calculate to see results</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
