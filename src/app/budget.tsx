@@ -1,7 +1,19 @@
 // app/BudgetingApp.tsx
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+// Define an interface for the input values
+interface CalculationValues {
+  memberAmount: number;
+  maiaSubscription: number;
+  openAISubscription: number;
+  antropicSubscription: number;
+  geminiSubscription: number;
+  salesTarget: number;
+  salesPrice: number;
+  exchangeRate: number;
+}
 
 const BudgetingApp: React.FC = () => {
   const [memberAmount, setMemberAmount] = useState<number>(0);
@@ -16,37 +28,81 @@ const BudgetingApp: React.FC = () => {
   const [profit, setProfit] = useState<number>(0);
   const [isCalculated, setIsCalculated] = useState<boolean>(false);
   const [exchangeRate, setExchangeRate] = useState<number>(15000);
+  const [lastCalculatedValues, setLastCalculatedValues] = useState<CalculationValues | null>(null);
 
   const daysInMonth = 30;
 
+  // Store all input values in an object for comparison
+  const currentValues: CalculationValues = {
+    memberAmount,
+    maiaSubscription,
+    openAISubscription,
+    antropicSubscription,
+    geminiSubscription,
+    salesTarget,
+    salesPrice,
+    exchangeRate
+  };
+
+  // Check if any values have changed since last calculation
+  useEffect(() => {
+    if (isCalculated && lastCalculatedValues) {
+      const hasChanged = (Object.keys(currentValues) as Array<keyof CalculationValues>).some(
+        key => currentValues[key] !== lastCalculatedValues[key]
+      );
+      if (hasChanged) {
+        setIsCalculated(false);
+      }
+    }
+  }, [
+    memberAmount,
+    maiaSubscription,
+    openAISubscription,
+    antropicSubscription,
+    geminiSubscription,
+    salesTarget,
+    salesPrice,
+    exchangeRate,
+    isCalculated,
+    lastCalculatedValues
+  ]);
+
+  const handleCalculate = () => {
+    const openAIInRupiah = openAISubscription * exchangeRate * daysInMonth;
+    const antropicInRupiah = antropicSubscription * exchangeRate * daysInMonth;
+    const geminiInRupiah = geminiSubscription * daysInMonth;
+    const calculatedTotalPrice = (memberAmount * maiaSubscription) + openAIInRupiah + antropicInRupiah + geminiInRupiah;
+    setTotalPrice(calculatedTotalPrice);
+
+    const calculatedTotalSales = salesTarget * salesPrice;
+    setTotalSales(calculatedTotalSales);
+
+    const calculatedProfit = calculatedTotalSales - calculatedTotalPrice;
+    setProfit(calculatedProfit);
+    setIsCalculated(true);
+    setLastCalculatedValues({ ...currentValues });
+  };
+
+  const handleReset = () => {
+    setMemberAmount(0);
+    setMaiaSubscription(0);
+    setOpenAISubscription(0);
+    setAntropicSubscription(0);
+    setGeminiSubscription(0);
+    setSalesTarget(0);
+    setSalesPrice(0);
+    setTotalPrice(0);
+    setTotalSales(0);
+    setProfit(0);
+    setIsCalculated(false);
+    setLastCalculatedValues(null);
+  };
+
   const handleButtonClick = () => {
     if (isCalculated) {
-      // Reset all input fields and results
-      setMemberAmount(0);
-      setMaiaSubscription(0);
-      setOpenAISubscription(0);
-      setAntropicSubscription(0);
-      setGeminiSubscription(0);
-      setSalesTarget(0);
-      setSalesPrice(0);
-      setTotalPrice(0);
-      setTotalSales(0);
-      setProfit(0);
-      setIsCalculated(false);
+      handleReset();
     } else {
-      // Perform calculations
-      const openAIInRupiah = openAISubscription * exchangeRate * daysInMonth;
-      const antropicInRupiah = antropicSubscription * exchangeRate * daysInMonth;
-      const geminiInRupiah = geminiSubscription * daysInMonth;
-      const calculatedTotalPrice = (memberAmount * maiaSubscription) + openAIInRupiah + antropicInRupiah + geminiInRupiah;
-      setTotalPrice(calculatedTotalPrice);
-
-      const calculatedTotalSales = salesTarget * salesPrice;
-      setTotalSales(calculatedTotalSales);
-
-      const calculatedProfit = calculatedTotalSales - calculatedTotalPrice;
-      setProfit(calculatedProfit);
-      setIsCalculated(true);
+      handleCalculate();
     }
   };
 
@@ -61,7 +117,7 @@ const BudgetingApp: React.FC = () => {
           <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">MAIA Cost Estimation</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input label="Member Amount" value={memberAmount} onChange={setMemberAmount} />
-            <Input label="MAIA Sub (IDR/month)" value={maiaSubscription} onChange={setMaiaSubscription} />
+            <Input label="MAIA Sub (/member/IDR/month)" value={maiaSubscription} onChange={setMaiaSubscription} />
             <Input label="OpenAI Sub (USD/day)" value={openAISubscription} onChange={setOpenAISubscription} />
             <Input label="Antropic Sub (USD/day)" value={antropicSubscription} onChange={setAntropicSubscription} />
             <Input label="Gemini Sub (USD/day)" value={geminiSubscription} onChange={setGeminiSubscription} />
@@ -97,40 +153,40 @@ const BudgetingApp: React.FC = () => {
 };
 
 interface InputProps {
-    label: string;
-    value: number;
-    onChange: (value: number) => void;
-  }
-  
-  const Input: React.FC<InputProps> = ({ label, value, onChange }) => {
-    const formatNumber = (num: number): string => {
-      return num.toLocaleString('id-ID');
-    };
-  
-    const unformatNumber = (str: string): number => {
-      return Number(str.replace(/\./g, ''));
-    };
-  
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const inputValue = e.target.value;
-      const numericValue = unformatNumber(inputValue);
-      
-      if (!isNaN(numericValue)) {
-        onChange(numericValue);
-      }
-    };
-  
-    return (
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
-        <input
-          type="text"
-          value={value === 0 ? '' : formatNumber(value)}
-          onChange={handleChange}
-          className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-        />
-      </div>
-    );
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}
+
+const Input: React.FC<InputProps> = ({ label, value, onChange }) => {
+  const formatNumber = (num: number): string => {
+    return num.toLocaleString('id-ID');
   };
+
+  const unformatNumber = (str: string): number => {
+    return Number(str.replace(/\./g, ''));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const numericValue = unformatNumber(inputValue);
+    
+    if (!isNaN(numericValue)) {
+      onChange(numericValue);
+    }
+  };
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
+      <input
+        type="text"
+        value={value === 0 ? '' : formatNumber(value)}
+        onChange={handleChange}
+        className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+      />
+    </div>
+  );
+};
 
 export default BudgetingApp;
